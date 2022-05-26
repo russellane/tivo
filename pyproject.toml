@@ -1,6 +1,6 @@
 [project]
 name = "tivo"
-version = "1.0.0"
+version = "1.0.2"
 description = "A curses-based TiVo remote control"
 authors = [
     {name = "Russel Lane", email = "russel@rlane.com"}
@@ -17,9 +17,9 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "libcli>=1.0.0",
-    "libcurses>=1.0.0",
     "loguru>=0.6.0",
+    "rlane-libcli>=1.0.1",
+    "rlane-libcurses>=1.0.1",
 ]
 
 [project.urls]

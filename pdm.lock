@@ -174,26 +174,6 @@ requires_python = ">=3.6"
 summary = "A fast and thorough lazy object proxy."
 
 [[package]]
-name = "libcli"
-version = "1.0.0"
-requires_python = ">=3.8"
-summary = "Command line interface framework"
-dependencies = [
-    "ansicolors>=1.1.8",
-    "argcomplete>=2.0.0",
-    "tomli>=2.0.1",
-]
-
-[[package]]
-name = "libcurses"
-version = "1.0.0"
-requires_python = ">=3.8"
-summary = "Curses based boxes, menus, loggers"
-dependencies = [
-    "loguru>=0.6.0",
-]
-
-[[package]]
 name = "loguru"
 version = "0.6.0"
 requires_python = ">=3.5"
@@ -316,6 +296,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "rlane-libcli"
+version = "1.0.1"
+requires_python = ">=3.8"
+summary = "Command line interface framework"
+dependencies = [
+    "ansicolors>=1.1.8",
+    "argcomplete>=2.0.0",
+    "tomli>=2.0.1",
+]
+
+[[package]]
+name = "rlane-libcurses"
+version = "1.0.1"
+requires_python = ">=3.8"
+summary = "Curses based boxes, menus, loggers"
+dependencies = [
+    "loguru>=0.6.0",
+]
+
+[[package]]
 name = "setuptools"
 version = "62.3.2"
 requires_python = ">=3.7"
@@ -352,7 +352,7 @@ summary = "Module for decorators, wrappers and monkey patching."
 
 [metadata]
 lock_version = "3.1"
-content_hash = "sha256:5df5de1fb72637248ebb82198a33f864a114f9460f35fe8a313618114e97dbb3"
+content_hash = "sha256:a1da044a3395e973edf61c62cd0c8ad04bd452dea515fa58c7958359519fce2e"
 
 [metadata.files]
 "ansicolors 1.1.8" = [
@@ -364,8 +364,8 @@ content_hash = "sha256:5df5de1fb72637248ebb82198a33f864a114f9460f35fe8a313618114
     {file = "argcomplete-2.0.0.tar.gz", hash = "sha256:6372ad78c89d662035101418ae253668445b391755cfe94ea52f1b9d22425b20"},
 ]
 "astor 0.8.1" = [
-    {file = "astor-0.8.1-py2.py3-none-any.whl", hash = "sha256:070a54e890cefb5b3739d19f30f5a5ec840ffc9c50ffa7d23cc9fc1a38ebbfc5"},
-    {file = "astor-0.8.1.tar.gz", hash = "sha256:6a6effda93f4e1ce9f618779b2dd1d9d84f1e32812c23a29b3fff6fd7f63fa5e"},
+    {file = "astor-0.8.1-py2.py3-none-any.whl", hash = "sha256:bac210200f71546eebeb9255dd84db8584f5e4ee97d12ba40cf4e8a3e491042d"},
+    {file = "astor-0.8.1.tar.gz", hash = "sha256:9fca6e5af0946a560fa147ea0b15fe0c6f2525c80486956bd46e0abbeef36517"},
 ]
 "astroid 2.11.5" = [
     {file = "astroid-2.11.5-py3-none-any.whl", hash = "sha256:14ffbb4f6aa2cf474a0834014005487f7ecd8924996083ab411e7fa0b508ce0b"},
@@ -409,8 +409,8 @@ content_hash = "sha256:5df5de1fb72637248ebb82198a33f864a114f9460f35fe8a313618114
     {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
 ]
 "colorama 0.4.4" = [
-    {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
-    {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
+    {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:df1b75950404284103727ee967f46375d1bb4ba7302bb1af74521e12233c48a2"},
+    {file = "colorama-0.4.4.tar.gz", hash = "sha256:e0a5998fe95a9f21e5af4a73aff20ef37ca3f2efd1c38e84475efdf3031926f6"},
 ]
 "coverage 6.4" = [
     {file = "coverage-6.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:50ed480b798febce113709846b11f5d5ed1e529c88d8ae92f707806c50297abf"},
@@ -488,8 +488,8 @@ content_hash = "sha256:5df5de1fb72637248ebb82198a33f864a114f9460f35fe8a313618114
     {file = "flake8_simplify-0.19.2.tar.gz", hash = "sha256:a30ef76bf1c0cb89a52a8a5cee37667688e61a66735e997c08d56cd002f9e3e9"},
 ]
 "iniconfig 1.1.1" = [
-    {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
-    {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
+    {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:8cd395a2a89caee27b08d7879c1515fa9d93e0c477a5b38c9893787fc5e51896"},
+    {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:714dfcaf550420126ed7e66bb1cbc893752af388742828f294c21f847d78b88a"},
 ]
 "isort 5.10.1" = [
     {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
@@ -533,12 +533,6 @@ content_hash = "sha256:5df5de1fb72637248ebb82198a33f864a114f9460f35fe8a313618114
     {file = "lazy_object_proxy-1.7.1-cp39-cp39-win_amd64.whl", hash = "sha256:677ea950bef409b47e51e733283544ac3d660b709cfce7b187f5ace137960d61"},
     {file = "lazy_object_proxy-1.7.1-pp37.pp38-none-any.whl", hash = "sha256:d66906d5785da8e0be7360912e99c9188b70f52c422f9fc18223347235691a84"},
     {file = "lazy-object-proxy-1.7.1.tar.gz", hash = "sha256:d609c75b986def706743cdebe5e47553f4a5a1da9c5ff66d76013ef396b5a8a4"},
-]
-"libcli 1.0.0" = [
-    {file = "libcli-1.0.0-py3-none-any.whl", hash = "sha256:db2b3dabccfcd38e00a5f8342d0b2e5b88deedd6e95346cb2857ecea756c2121"},
-]
-"libcurses 1.0.0" = [
-    {file = "libcurses-1.0.0-py3-none-any.whl", hash = "sha256:c418bb5cb36ca7ab8fc1cc22681b102a786a2099e227926cad2f4c940eb0e03b"},
 ]
 "loguru 0.6.0" = [
     {file = "loguru-0.6.0-py3-none-any.whl", hash = "sha256:4e2414d534a2ab57573365b3e6d0234dfb1d84b68b7f3b948e6fb743860a77c3"},
@@ -599,6 +593,14 @@ content_hash = "sha256:5df5de1fb72637248ebb82198a33f864a114f9460f35fe8a313618114
 "pytest-cov 3.0.0" = [
     {file = "pytest_cov-3.0.0-py3-none-any.whl", hash = "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6"},
     {file = "pytest-cov-3.0.0.tar.gz", hash = "sha256:e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470"},
+]
+"rlane-libcli 1.0.1" = [
+    {file = "rlane_libcli-1.0.1-py3-none-any.whl", hash = "sha256:e5bc2674193bd0e9b28561b270e0fba094bb59b5497303d87a6baa22eb267c9b"},
+    {file = "rlane-libcli-1.0.1.tar.gz", hash = "sha256:9dd64b2cd47bd8313971fa53b4b219f42535dbb621b9f863254e2d330cbe0c32"},
+]
+"rlane-libcurses 1.0.1" = [
+    {file = "rlane_libcurses-1.0.1-py3-none-any.whl", hash = "sha256:7ffdd67eedd961a8ea45e3837477dc3557fe0e5d798d971b73839ca6a2c0425c"},
+    {file = "rlane-libcurses-1.0.1.tar.gz", hash = "sha256:d4bbe072e4a5fe065c38130b404237f2c4e4219006c89e8e4c48be1538f246ba"},
 ]
 "setuptools 62.3.2" = [
     {file = "setuptools-62.3.2-py3-none-any.whl", hash = "sha256:68e45d17c9281ba25dc0104eadd2647172b3472d9e01f911efa57965e8d51a36"},
