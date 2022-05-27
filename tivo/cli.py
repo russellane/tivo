@@ -16,6 +16,8 @@ class TivoCLI(BaseCLI):
         "config-file": Path.home().joinpath(".tivo.toml"),
         # toml [section-name].
         "config-name": "tivo",
+        # distribution name, not importable package name
+        "dist-name": "rlane-tivo",
     }
 
     def init_parser(self) -> None:
