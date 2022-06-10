@@ -61,6 +61,8 @@ class TivoUI:
         #
         for device in self.remote.devices.values():
             self.add_device(device)
+        else:
+            self.redraw()
 
         # device status window fields, attributes of TivoDevice(object), in its order.
 

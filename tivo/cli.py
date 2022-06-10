@@ -1,4 +1,4 @@
-"""Tivo command line interface."""
+"""Command line interface."""
 
 from pathlib import Path
 from typing import List, Optional
@@ -9,7 +9,7 @@ import tivo.cmd
 
 
 class TivoCLI(BaseCLI):
-    """Tivo command line interface."""
+    """Command line interface."""
 
     config = {
         # name of config file.
