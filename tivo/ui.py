@@ -61,8 +61,7 @@ class TivoUI:
         #
         for device in self.remote.devices.values():
             self.add_device(device)
-        else:
-            self.redraw()
+        self.redraw()
 
         # device status window fields, attributes of TivoDevice(object), in its order.
 
@@ -111,13 +110,13 @@ class TivoUI:
         # widths of all 'key' subcolumns
         for col in range(ncols):
             self._key_widths.append(
-                max([len(self._attrs[a]["key"]) for a in self._cols[col] if a is not None])
+                max(len(self._attrs[a]["key"]) for a in self._cols[col] if a is not None)
             )
 
         # widths of all but the last 'value' subcolumns
         for col in range(ncols - 1):
             self._val_widths.append(
-                max([self._attrs[a]["width"] for a in self._cols[col] if a is not None])
+                max(self._attrs[a]["width"] for a in self._cols[col] if a is not None)
             )
 
         # width of the last 'value' subcolumn
