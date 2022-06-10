@@ -15,10 +15,10 @@ publish_local::
 		cd dist; echo *.whl | cpio -pdmuv `pip config get global.find-links`
 
 publish_test::
-		python -m twine upload --verbose -r testpypi dist/*
+		twine upload --verbose -r testpypi dist/*
 
 publish_prod::
-		python -m twine upload --verbose -r pypi dist/*
+		twine upload --verbose -r pypi dist/*
 
 install::
 		-pipx uninstall $(PROJECT)
