@@ -27,9 +27,13 @@ class TivoCLI(BaseCLI):
             prog=__package__,
             description=self.dedent(
                 """
-        `%(prog)s` controls remote TiVo™ devices. When no `COMMAND` is
-        given, `%(prog)s` runs an interactive full-screen terminal application,
-        that listens for broadcasts from TiVo devices and displays their status.
+    `%(prog)s` controls remote TiVo™ devices. When no `COMMAND` is given,
+    %(prog)s listens for broadcasts from remote devices, and presents an
+    interactive terminal application to display their status, change
+    channels, navigate menus, enter text into search box, etc. with the
+    full computer keyboard.
+
+    Channels may also be changed from the command line.
                 """
             ),
         )
