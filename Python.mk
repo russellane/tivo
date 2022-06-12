@@ -1,6 +1,6 @@
 # russellane/Python.mk
 
-build::		__pypackages__ ctags lint test doc
+build::		__pypackages__ tags lint test doc
 		pdm build
 
 lint::		black isort flake8
@@ -27,8 +27,8 @@ install::
 __pypackages__:
 		pdm install
 
-.PHONY:		ctags
-ctags::
+.PHONY:		tags
+tags::
 		ctags -R $(PROJECT) tests __pypackages__ 
 
 black::
