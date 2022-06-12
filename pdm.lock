@@ -295,8 +295,8 @@ dependencies = [
 
 [[package]]
 name = "rlane-libcli"
-version = "1.0.2"
-requires_python = ">=3.8"
+version = "1.0.3"
+requires_python = ">=3.10"
 summary = "Command line interface framework"
 dependencies = [
     "ansicolors>=1.1.8",
@@ -306,7 +306,7 @@ dependencies = [
 
 [[package]]
 name = "rlane-libcurses"
-version = "1.0.3"
+version = "1.0.4"
 requires_python = ">=3.10"
 summary = "Curses based boxes, menus, loggers"
 dependencies = [
@@ -356,7 +356,7 @@ summary = "Module for decorators, wrappers and monkey patching."
 
 [metadata]
 lock_version = "3.1"
-content_hash = "sha256:5dc448850cad7a6a0859fdffb635258eb63afdc4d8e09c1d0a1aebfdeb257be2"
+content_hash = "sha256:c14bfe7cb6af9d8eede86b33465bb015a0c7078699d35805d3aeee77356540d2"
 
 [metadata.files]
 "ansicolors 1.1.8" = [
@@ -598,13 +598,13 @@ content_hash = "sha256:5dc448850cad7a6a0859fdffb635258eb63afdc4d8e09c1d0a1aebfde
     {file = "pytest_cov-3.0.0-py3-none-any.whl", hash = "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6"},
     {file = "pytest-cov-3.0.0.tar.gz", hash = "sha256:e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470"},
 ]
-"rlane-libcli 1.0.2" = [
-    {file = "rlane_libcli-1.0.2-py3-none-any.whl", hash = "sha256:65add18dec61f27e89fe61ef77c7729c4dafd229640865ac8ce8dff6100efbbe"},
-    {file = "rlane-libcli-1.0.2.tar.gz", hash = "sha256:f5fb9a8c0199484ae68a5566ad7894d6748235bd1d42317a480a2b686966578b"},
+"rlane-libcli 1.0.3" = [
+    {file = "rlane_libcli-1.0.3-py3-none-any.whl", hash = "sha256:80db0db729434d13a70ac4d0d1f1e6c6c1485b7e8918129734524a7a4ef151c1"},
+    {file = "rlane-libcli-1.0.3.tar.gz", hash = "sha256:2d0139f3b09c62b2645adf92e2954dee843cecf53eee8268d98e7663ef30f634"},
 ]
-"rlane-libcurses 1.0.3" = [
-    {file = "rlane_libcurses-1.0.3-py3-none-any.whl", hash = "sha256:d2ab3ff205d161eae1aa3fe7e73c9bae40aa5d83bfc8b24e9f59da8986e8467a"},
-    {file = "rlane-libcurses-1.0.3.tar.gz", hash = "sha256:eb4ac3468fc9ec83225eb42ba3e9ebe00d2f17d74d2a7d8742e3a0b2bf2772de"},
+"rlane-libcurses 1.0.4" = [
+    {file = "rlane_libcurses-1.0.4-py3-none-any.whl", hash = "sha256:292d87a94450e10aeddde926a2cf22d97662888bd4b455c41f8a721b40e41f0b"},
+    {file = "rlane-libcurses-1.0.4.tar.gz", hash = "sha256:c6988c8aa54f86ee15ece89f2692e3f9d729c3237c6417e9b0d750f2981bb9a3"},
 ]
 "setuptools 62.3.3" = [
     {file = "setuptools-62.3.3-py3-none-any.whl", hash = "sha256:d1746e7fd520e83bbe210d02fff1aa1a425ad671c7a9da7d246ec2401a087198"},

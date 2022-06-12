@@ -18,8 +18,8 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "loguru>=0.6.0",
-    "rlane-libcli>=1.0.2",
-    "rlane-libcurses>=1.0.3",
+    "rlane-libcli>=1.0.3",
+    "rlane-libcurses>=1.0.4",
 ]
 
 [project.urls]
