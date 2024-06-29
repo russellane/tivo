@@ -8,8 +8,8 @@ import curses.ascii
 
 from libcurses import getkey, getline
 from libcurses.bw import BorderedWindow
-from libcurses.logwin import LoggerWindow
 from libcurses.menu import Menu
+from libcurses.sink import Sink
 from libcurses.stack import WindowStack
 from loguru import logger
 
@@ -54,7 +54,7 @@ class TivoUI:
         self.logger_win = self.wstack.append(0, self.ncols2)
 
         # start logging to the logger window
-        self.logwin = LoggerWindow(self.logger_win.w)
+        self.logwin = Sink(self.logger_win.w)
         self.logwin.set_location("{module}:{function}:{line}")
         self.logwin.set_verbose(remote.options.verbose)
 
@@ -235,7 +235,8 @@ class TivoUI:
 
         while True:
             self.update_status()
-            if not (item := menu.prompt(self.menu_win.w)):
+            menu.win = self.menu_win.w
+            if not (item := menu.prompt()):
                 logger.debug("break not menu.prompt")
                 break
             if self._run(item):
@@ -313,7 +314,8 @@ class TivoUI:
         # CLEAR
         # ACTION_A, B, C, D
 
-        if item := menu.prompt(self.menu_win.w):
+        menu.win = self.menu_win.w
+        if item := menu.prompt():
             return self._run(item)
 
         return False
@@ -411,7 +413,8 @@ class TivoUI:
         menu.add_item("C", "critical message!")
         menu.add_item("Q", "Quit")
 
-        while item := menu.prompt(self.menu_win.w):
+        menu.win = self.menu_win.w
+        while item := menu.prompt():
             if item.key in "0123456":
                 loc = ord(item.key) - ord("0")
                 self.wstack.insert(self.status_window_nlines, self.ncols2, loc)
@@ -419,6 +422,8 @@ class TivoUI:
                 logger.critical(item.text)
             elif item.key == "Q":
                 return False
+
+        return True
 
     def _set_verbose(self, verbose: int) -> None:
         logger.info("Setting verbose to {}", verbose)
