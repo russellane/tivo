@@ -22,9 +22,9 @@ class TivoDevice:
     def __init__(
         self,
         identity: str,
-        machine: str = None,
-        address: str = None,
-        host: str = None,
+        machine: str | None = None,
+        address: str | None = None,
+        host: str | None = None,
     ) -> None:
         """Init."""
 
@@ -37,14 +37,14 @@ class TivoDevice:
 
         self.window = None
         self.screen = self.screens[0]  # the screen we think it's on
-        self.last_msg_sent = None
-        self.last_msg_rcvd = None
-        self._last_msg_rcvd_time = 0
-        self.status = None  # from last response
-        self.channel = None  # from last CH_STATUS response
-        self.subchannel = None  # from last CH_STATUS response
-        self.reason = None  # from last CH_STATUS or CH_FAILED response
-        self.sock = None  # connection
+        self.last_msg_sent: str | None = None
+        self.last_msg_rcvd: str | None = None
+        self._last_msg_rcvd_time: float = 0
+        self.status: str | None = None  # from last response
+        self.channel: str | None = None  # from last CH_STATUS response
+        self.subchannel: str | None = None  # from last CH_STATUS response
+        self.reason: str | None = None  # from last CH_STATUS or CH_FAILED response
+        self.sock: socket.socket | None = None  # connection
         self.npings = 0  # number of broadcasts heard from device
 
     def _map_host(self):

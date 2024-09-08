@@ -192,7 +192,7 @@ class TivoUI:
     def main_menu(self):
         """Main menu."""
 
-        menu = Menu("Main menu", "Choose")
+        menu = Menu(title="Main menu", instructions="Choose")
 
         menu.add_item("g", "get channel", self._get_channel)
 
@@ -291,7 +291,7 @@ class TivoUI:
             logger.error("No device in focus")
             return False
 
-        menu = Menu("IRCODE menu", "Choose IRCODE to send")
+        menu = Menu(title="IRCODE menu", instructions="Choose IRCODE to send")
 
         for _ in "0123456789":
             menu.add_item(_, "NUM" + _)
@@ -405,7 +405,7 @@ class TivoUI:
 
     def _test_menu(self):
 
-        menu = Menu("Test menu", "Choose test")
+        menu = Menu(title="Test menu", instructions="Choose test")
 
         for loc in "0123456":
             menu.add_item(loc, "insert before " + loc)

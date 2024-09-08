@@ -7,7 +7,7 @@ import argparse
 import re
 import socket
 import threading
-from typing import Dict
+from typing import Any
 
 import libcurses
 from loguru import logger
@@ -21,13 +21,13 @@ from tivo.ui import TivoUI
 class TivoRemote:
     """Hand-held device that controls Tivo set-top devices remotely."""
 
-    def __init__(self, options: argparse.Namespace, config: {}) -> None:
+    def __init__(self, options: argparse.Namespace, config: dict[str, Any]) -> None:
         """Initialize TivoRemote given `options` and `config`."""
 
         self.options = options  # from cli
         self.config = config  # from cli
-        self.devices: Dict(TivoDevice) = {}
-        self.ui: TivoUI = None
+        self.devices: dict[str, TivoDevice] = {}
+        self.ui: TivoUI | None = None
 
         if identities := self.config.get("identity"):
             for identity, host in identities.items():
@@ -39,7 +39,8 @@ class TivoRemote:
         for device in self.devices.values():
             if name in (device.identity, device.machine, device.address, device.host):
                 return device
-        return None
+
+        raise NameError(f"Can't find tivo device `{name}`")
 
     def control(self):
         """Operate remote."""

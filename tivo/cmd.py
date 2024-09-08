@@ -12,7 +12,7 @@ from tivo.remote import TivoRemote
 class TivoCmd(BaseCmd):
     """Tivo base command class."""
 
-    remote = None
+    remote: TivoRemote
 
     def add_host_argument(self, parser: argparse.ArgumentParser) -> None:
         """Add `HOST` argument to given `parser`."""
@@ -46,9 +46,7 @@ class TivoCmd(BaseCmd):
     def getdevicebyname(self, name: str) -> TivoDevice:
         """Return the device with the matching `name`."""
 
-        if not (device := self.remote.getdevicebyname(name)):
-            self.cli.parser.error(f"Can't find tivo device `{name}`")
-        return device
+        return self.remote.getdevicebyname(name)
 
 
 def main(cli: BaseCLI) -> None:
