@@ -1,11 +1,12 @@
 """Command line interface."""
 
 from pathlib import Path
-from typing import List, Optional
 
 from libcli import BaseCLI
 
-import tivo.cmd
+from tivo.cmd import TivoCmd
+from tivo.core import TivoCore
+from tivo.remote import TivoRemote
 
 
 class TivoCLI(BaseCLI):
@@ -19,6 +20,8 @@ class TivoCLI(BaseCLI):
         # distribution name, not importable package name
         "dist-name": "rlane-tivo",
     }
+
+    core: TivoCore
 
     def init_parser(self) -> None:
         """Initialize argument parser."""
@@ -55,9 +58,19 @@ class TivoCLI(BaseCLI):
 
     def main(self) -> None:
         """Command line interface entry point (method)."""
-        tivo.cmd.main(self)
+
+        self.core = TivoCore(self.options, self.config)
+        TivoCmd.core = self.core
+
+        if hasattr(self.options, "cmd") and self.options.cmd:
+            # command line
+            self.options.cmd()
+        else:
+            # interactive
+            remote = TivoRemote(self.core)
+            remote.run_application()
 
 
-def main(args: Optional[List[str]] = None) -> None:
+def main(args: list[str] | None = None) -> None:
     """Command line interface entry point (function)."""
     return TivoCLI(args).main()

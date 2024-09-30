@@ -5,14 +5,16 @@ User interface for TiVo remote control.
 
 import curses
 import curses.ascii
+from typing import Any
 
-from libcurses import getkey, getline
+from libcurses import getkey, getline, preserve_cursor
 from libcurses.bw import BorderedWindow
-from libcurses.menu import Menu
+from libcurses.menu import Menu, MenuItem
 from libcurses.sink import Sink
 from libcurses.stack import WindowStack
 from loguru import logger
 
+from tivo.core import TivoCore
 from tivo.device import TivoDevice
 
 
@@ -21,12 +23,15 @@ class TivoUI:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, remote, stdscr):
-        """Create user interface for `remote` on `stdscr`."""
+    def __init__(self, core: TivoCore, stdscr: curses.window) -> None:
+        """Create user interface on `stdscr`."""
 
-        self.remote = remote  # tivo.remote.TivoRemote
+        self.core = core
+        self.core.set_ui_add_device_callback(self.add_device)
+        self.core.set_ui_update_device_status_callback(self.update_device_status)
+
         # index of the device that has the focus
-        self._ifocus = None
+        self._ifocus: int | None = None
 
         maxy, maxx = stdscr.getmaxyx()
         padding_y, padding_x = 0, 0
@@ -56,12 +61,7 @@ class TivoUI:
         # start logging to the logger window
         self.logwin = Sink(self.logger_win.w)
         self.logwin.set_location("{module}:{function}:{line}")
-        self.logwin.set_verbose(remote.options.verbose)
-
-        #
-        for device in self.remote.devices.values():
-            self.add_device(device)
-        self.redraw()
+        self.logwin.set_verbose(self.core.options.verbose)
 
         # device status window fields, attributes of TivoDevice(object), in its order.
 
@@ -110,13 +110,13 @@ class TivoUI:
         # widths of all 'key' subcolumns
         for col in range(ncols):
             self._key_widths.append(
-                max(len(self._attrs[a]["key"]) for a in self._cols[col] if a is not None)
+                max(len(str(self._attrs[a]["key"])) for a in self._cols[col] if a is not None)
             )
 
         # widths of all but the last 'value' subcolumns
         for col in range(ncols - 1):
             self._val_widths.append(
-                max(self._attrs[a]["width"] for a in self._cols[col] if a is not None)
+                max(int(self._attrs[a]["width"]) for a in self._cols[col] if a is not None)  # type: ignore # noqa
             )
 
         # width of the last 'value' subcolumn
@@ -133,27 +133,41 @@ class TivoUI:
             )
         )
 
+        #
+        for device in self.core.devices.values():
+            self.add_device(device)
+        else:
+            self.redraw()
+
     def add_device(self, device: TivoDevice) -> None:
         """Add device between last device and logger window."""
         self.wstack.insert(self.status_window_nlines, self.ncols2, -1)
         device.window = self.wstack.windows[-2]
+        self.update_status()
         self.redraw()
 
     @property
-    def _focus(self):
+    def _focus(self) -> TivoDevice | None:
         """The device that has the focus."""
-        return (
-            None
-            if self._ifocus is None
-            else self.remote.devices[list(self.remote.devices.keys())[self._ifocus]]
-        )
 
-    def update_status(self):
+        if self._ifocus is None:
+            return None
+
+        return self.core.devices[list(self.core.devices.keys())[self._ifocus]]
+
+    def update_status(self) -> None:
         """Update the status of all devices."""
-        for device in self.remote.devices.values():
+
+        for device in [x for x in self.core.devices.values() if x.window]:
+            self.update_device_status(device)
+
+    def update_device_status(self, device: TivoDevice) -> None:
+        """Build status window for device."""
+
+        with preserve_cursor():
             self._update_device_status(device)
 
-    def _update_device_status(self, device):
+    def _update_device_status(self, device: TivoDevice) -> None:
         """Build status window for device."""
 
         bwin = device.window
@@ -174,7 +188,7 @@ class TivoUI:
                 #
                 attrname = self._rows[row][col]
                 if attr := self._attrs.get(attrname):
-                    key = attr["key"]
+                    key = str(attr["key"])
                     value = str(getattr(device, attrname))
                 else:
                     key = value = ""
@@ -189,7 +203,7 @@ class TivoUI:
         # bwin.w.scroll(-1)
         bwin.w.refresh()
 
-    def main_menu(self):
+    def main_menu(self) -> None:
         """Main menu."""
 
         menu = Menu(title="Main menu", instructions="Choose")
@@ -243,7 +257,7 @@ class TivoUI:
                 logger.debug("break _run")
                 break
 
-    def _run(self, item):
+    def _run(self, item: MenuItem) -> bool:
 
         if isinstance(item.payload, str):
             # invoke the named method on the device in focus
@@ -256,11 +270,11 @@ class TivoUI:
                 func(item.text)
                 return False  # continue looping
         else:
-            return (item.payload)()
+            return bool((item.payload)())
 
         return True  # stop looping
 
-    def _get_channel(self):
+    def _get_channel(self) -> None:
         """Get current channel."""
 
         if not self._focus:
@@ -269,7 +283,7 @@ class TivoUI:
 
         self._focus.getch()
 
-    def _set_channel(self):
+    def _set_channel(self) -> None:
         """Prompt for channel and change it."""
 
         if not self._focus:
@@ -281,7 +295,7 @@ class TivoUI:
         if channel := getline(self.menu_win.w):
             self._focus.send_setch(channel)
 
-    def _ircode_menu(self):
+    def _ircode_menu(self) -> bool:
         """Full list of IRCODE's.
 
         Other menus, like the main menu, may have duplicates.
@@ -294,7 +308,7 @@ class TivoUI:
         menu = Menu(title="IRCODE menu", instructions="Choose IRCODE to send")
 
         for _ in "0123456789":
-            menu.add_item(_, "NUM" + _)
+            menu.add_item(_, "NUM" + _, "send_ircode")
 
         for screen in TivoDevice.screens:
             menu.add_item(screen[0], screen, "send_ircode")
@@ -320,7 +334,7 @@ class TivoUI:
 
         return False
 
-    def _keyboard_shell(self):
+    def _keyboard_shell(self) -> None:
 
         if not self._focus:
             logger.error("No device in focus")
@@ -383,27 +397,29 @@ class TivoUI:
         curses.KEY_ENTER: "SELECT",
     }
 
-    def _prev_device(self):
+    def _prev_device(self) -> None:
 
-        if not (ndevices := len(self.remote.devices)):
+        if not (ndevices := len(self.core.devices)):
             logger.error("There are no devices")
             return
 
         self._ifocus = ndevices - 1 if not self._ifocus else self._ifocus - 1
+        assert self._focus
         logger.info(f"Current device: {self._focus.host!r}")
 
-    def _next_device(self):
+    def _next_device(self) -> None:
 
-        if not (ndevices := len(self.remote.devices)):
+        if not (ndevices := len(self.core.devices)):
             logger.error("There are no devices")
             return
 
         self._ifocus = (
             0 if self._ifocus is None or self._ifocus == ndevices - 1 else self._ifocus + 1
         )
+        assert self._focus
         logger.info(f"Current device: {self._focus.host!r}")
 
-    def _test_menu(self):
+    def _test_menu(self) -> Any:
 
         menu = Menu(title="Test menu", instructions="Choose test")
 
@@ -415,12 +431,13 @@ class TivoUI:
 
         menu.win = self.menu_win.w
         while item := menu.prompt():
-            if item.key in "0123456":
-                loc = ord(item.key) - ord("0")
-                self.wstack.insert(self.status_window_nlines, self.ncols2, loc)
-            elif item.key == "C":
+            assert isinstance(item.key, int)
+            if chr(item.key) in "0123456":
+                _loc = item.key - ord("0")
+                self.wstack.insert(self.status_window_nlines, self.ncols2, _loc)
+            elif chr(item.key) == "C":
                 logger.critical(item.text)
-            elif item.key == "Q":
+            elif chr(item.key) == "Q":
                 return False
 
         return True
@@ -429,10 +446,10 @@ class TivoUI:
         logger.info("Setting verbose to {}", verbose)
         self.logwin.set_verbose(verbose)
 
-    def redraw(self):
+    def redraw(self) -> None:
         """Redraw everything."""
 
-        # self.menu_win.redraw()
+        self.menu_win.redraw()
         self.menu_win.refresh()
-        # self.wstack.redraw()
+        self.wstack.redraw()
         self.wstack.refresh()

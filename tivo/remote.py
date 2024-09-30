@@ -1,53 +1,48 @@
 """TivoRemote.
 
 Hand-held device that controls Tivo set-top devices remotely.
+
+See https://github.com/RogueProeliator/IndigoPlugin-TiVo-Network-Remote/blob/master/Documentation/TiVo_TCP_Network_Remote_Control_Protocol.pdf  # noqa
 """
 
-import argparse
+import curses
 import re
 import socket
 import threading
-from typing import Any
 
 import libcurses
 from loguru import logger
 
+from tivo.core import TivoCore
 from tivo.device import TivoDevice
 from tivo.ui import TivoUI
-
-# https://github.com/RogueProeliator/IndigoPlugin-TiVo-Network-Remote/blob/master/Documentation/TiVo_TCP_Network_Remote_Control_Protocol.pdf
 
 
 class TivoRemote:
     """Hand-held device that controls Tivo set-top devices remotely."""
 
-    def __init__(self, options: argparse.Namespace, config: dict[str, Any]) -> None:
-        """Initialize TivoRemote given `options` and `config`."""
+    # pylint: disable=too-few-public-methods
 
-        self.options = options  # from cli
-        self.config = config  # from cli
-        self.devices: dict[str, TivoDevice] = {}
-        self.ui: TivoUI | None = None
+    def __init__(self, core: TivoCore) -> None:
+        """Initialize."""
 
-        if identities := self.config.get("identity"):
+        self.core = core
+
+        # Add devices from config file.
+
+        if identities := self.core.config.get("identity"):
             for identity, host in identities.items():
-                self.devices[identity] = TivoDevice(identity=identity, host=host)
+                device = TivoDevice(identity=identity, host=host)
+                logger.info("{!r} Configured device", device.host)
+                self.core.add_device(device)
 
-    def getdevicebyname(self, name: str) -> TivoDevice:
-        """Return the device with the matching `name`."""
+    def run_application(self) -> None:
+        """Run full-screen interactive application."""
 
-        for device in self.devices.values():
-            if name in (device.identity, device.machine, device.address, device.host):
-                return device
+        libcurses.wrapper(self._run_app)
 
-        raise NameError(f"Can't find tivo device `{name}`")
-
-    def control(self):
-        """Operate remote."""
-        libcurses.wrapper(self._control)
-
-    def _control(self, stdscr):
-        """Operate remote in curses main window `stdscr`."""
+    def _run_app(self, stdscr: curses.window) -> None:
+        """Run application in curses main window `stdscr`."""
 
         # Listen for devices, update display.
         thread = threading.Thread(name="listener", target=self._listen_for_devices, daemon=True)
@@ -55,10 +50,11 @@ class TivoRemote:
 
         # Read keyboard/mouse, update display.
         threading.current_thread().name = "console"
-        self.ui = TivoUI(self, stdscr)
-        self.ui.main_menu()
+        ui = TivoUI(self.core, stdscr)
+        ui.main_menu()
 
-    def _listen_for_devices(self):
+    def _listen_for_devices(self) -> None:
+        """Docstring."""
 
         # tivoconnect=1
         # swversion=20.7.4d.RC2-746-2-746
@@ -66,10 +62,13 @@ class TivoRemote:
         # identity=7460001902767F2
         # machine=DVR 67F2
         # platform=tcd/Series4
-        # services=TiVoMediaServer:80/http'
+        # services=TiVoMediaServer:80/http
 
         beacon = 2190
+        # sent by tivo devices
         regex = re.compile(r"identity=(?P<identity>[^\n]+)\n.*machine=(?P<machine>[^\n]+)")
+        # extension: sent by our tivo device emulator.
+        regex2 = re.compile(r"port=(?P<port>[^\n]+)")
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.bind(("", beacon))
         logger.info(f"Listening on UDP port {beacon!r}")
@@ -92,14 +91,29 @@ class TivoRemote:
             machine = match.group("machine")
             address = address[0]
 
-            if (device := self.devices.get(identity)) is None:
-                device = TivoDevice(identity=identity, machine=machine, address=address)
+            if match := regex2.search(msg):
+                # sent from our emulator.
+                port = int(match.group("port"))
+            else:
+                # sent from an actual tivo device.
+                port = None
+
+            if (device := self.core.get_device_by_name(identity)) is None:
+                device = TivoDevice(
+                    identity=identity,
+                    machine=machine,
+                    address=address,
+                    port=port,
+                )
                 logger.info("{!r} New device", device.host)
-                self.devices[identity] = device
-                if self.ui:
-                    self.ui.add_device(device)
+                self.core.add_device(device)
 
             logger.debug("{!r} Hello", device.host)
-            device.handle_hello_event(identity=identity, machine=machine, address=address)
-            if self.ui:
-                self.ui.update_status()
+            device.handle_hello_event(
+                identity=identity,
+                machine=machine,
+                address=address,
+                port=port,
+            )
+            if self.core.ui_update_device_status_callback:
+                self.core.ui_update_device_status_callback(device)

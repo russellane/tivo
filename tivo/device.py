@@ -6,6 +6,7 @@ Set-top Tivo device.
 import socket
 import time
 
+from libcurses.bw import BorderedWindow
 from loguru import logger
 
 # https://github.com/RogueProeliator/IndigoPlugin-TiVo-Network-Remote/blob/master/Documentation/TiVo_TCP_Network_Remote_Control_Protocol.pdf
@@ -16,7 +17,6 @@ class TivoDevice:
     """Tivo Device."""
 
     screens = ["LIVETV", "TIVO", "NOWPLAYING", "GUIDE"]
-    port = 31339
     timeout = 2.0
 
     def __init__(
@@ -25,17 +25,21 @@ class TivoDevice:
         machine: str | None = None,
         address: str | None = None,
         host: str | None = None,
+        port: int | None = None,
     ) -> None:
+        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-positional-arguments
         """Init."""
 
         self.identity = identity
         self.machine = machine
         self.address = address
         self.host = host
+        self.port = 31339 if port is None else port
 
         self._map_host()
 
-        self.window = None
+        self.window: BorderedWindow | None = None
         self.screen = self.screens[0]  # the screen we think it's on
         self.last_msg_sent: str | None = None
         self.last_msg_rcvd: str | None = None
@@ -47,7 +51,7 @@ class TivoDevice:
         self.sock: socket.socket | None = None  # connection
         self.npings = 0  # number of broadcasts heard from device
 
-    def _map_host(self):
+    def _map_host(self) -> None:
 
         if not self.host and self.address:
             # use case: heartbeat from new device.
@@ -69,7 +73,7 @@ class TivoDevice:
                 logger.debug("{!r} Can't gethostbyname; {}", self.host, err)
                 # wait for beacon
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.__dict__})"
 
     @property
@@ -88,6 +92,7 @@ class TivoDevice:
         identity: str,
         machine: str,
         address: str,
+        port: int | None = None,
     ) -> None:
         """Handle received hello message broadcast from device."""
 
@@ -100,6 +105,8 @@ class TivoDevice:
             self.machine = machine
         if not self.address:
             self.address = address
+        if port is not None:
+            self.port = port
         self._map_host()
         self.getch()
 
@@ -120,7 +127,7 @@ class TivoDevice:
         """Move down to previous channel."""
         self.send_ircode("CHANNELDOWN")
 
-    def _connect(self):
+    def _connect(self) -> None:
 
         if not self.address:
             logger.warning("{!r} No address yet", self.host)
@@ -156,37 +163,37 @@ class TivoDevice:
 
         self._recv()  # should respond with the current channel
 
-    def send_key(self, text):
+    def send_key(self, text: str) -> None:
         """Send key."""
 
         self._send("KEYBOARD " + text)
 
-    def send_teleport(self, text):
+    def send_teleport(self, text: str) -> None:
         """Send teleport."""
 
         assert text.startswith("TELEPORT ")
         self._send(text)
         self._recv()
 
-    def send_ircode(self, text):
+    def send_ircode(self, text: str) -> None:
         """Send ircode."""
 
         self._send("IRCODE " + text)
         self._recv()
 
-    def send_setch(self, text):
+    def send_setch(self, text: str) -> None:
         """Send setch."""
 
         self._send("SETCH " + text)
         self._recv()
 
-    def _send(self, msg):
+    def _send(self, msg: str) -> None:
 
         if not self.sock:
             self._connect()
 
         if self.sock:
-            logger.trace("{!r} Sending {!r}", self.host, msg)
+            logger.warning("{!r} Sending {!r}", self.host, msg)
             try:
                 self.sock.send((msg + "\r").encode("ASCII"))
                 self.last_msg_sent = msg
@@ -195,7 +202,7 @@ class TivoDevice:
                 self.sock.close()
                 self.sock = None
 
-    def _recv(self):
+    def _recv(self) -> None:
 
         if not self.sock:
             return
@@ -213,7 +220,7 @@ class TivoDevice:
             self.status = "Can't receive"
             self.reason = "timeout"
 
-    def _parse(self):
+    def _parse(self) -> None:
 
         # Expecting one of:
         #   CH_STATUS channel reason

@@ -18,7 +18,7 @@ class TivoListCmd(TivoCmd):
     def run(self) -> None:
         """Perform the command."""
 
-        for device in self.remote.devices.values():
+        for device in self.core.devices.values():
             parts = []
             if device.host:
                 parts.append(f"host {device.host}")
