@@ -133,9 +133,10 @@ class TivoUI:
             )
         )
 
-        #
-        for device in self.core.devices.values():
-            self.add_device(device)
+        # Add device status windows.
+        if self.core.devices:
+            for device in self.core.devices.values():
+                self.add_device(device)
         else:
             self.redraw()
 
@@ -158,7 +159,7 @@ class TivoUI:
     def update_status(self) -> None:
         """Update the status of all devices."""
 
-        for device in [x for x in self.core.devices.values() if x.window]:
+        for device in self.core.devices.values():
             self.update_device_status(device)
 
     def update_device_status(self, device: TivoDevice) -> None:
@@ -169,6 +170,9 @@ class TivoUI:
 
     def _update_device_status(self, device: TivoDevice) -> None:
         """Build status window for device."""
+
+        if not device.window:
+            return
 
         bwin = device.window
         bwin.w.clear()

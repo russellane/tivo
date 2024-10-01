@@ -60,6 +60,7 @@ class TivoCLI(BaseCLI):
         """Command line interface entry point (method)."""
 
         self.core = TivoCore(self.options, self.config)
+        remote = TivoRemote(self.core)
         TivoCmd.core = self.core
 
         if hasattr(self.options, "cmd") and self.options.cmd:
@@ -67,7 +68,6 @@ class TivoCLI(BaseCLI):
             self.options.cmd()
         else:
             # interactive
-            remote = TivoRemote(self.core)
             remote.run_application()
 
 
