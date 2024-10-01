@@ -11,21 +11,37 @@ import socket
 import time
 from dataclasses import dataclass, field
 from threading import Thread
+from typing import ClassVar
 
 
 @dataclass
 class Device:
     """Docstring."""
 
+    _identities: ClassVar[list[str]] = [
+        "7460001902767F2",
+        "A9000019022E28B",
+        "75000019042F2CD",
+        "66600099999AA11",
+        "66600099999BB22",
+        "66600099999CC33",
+        "66600099999DD44",
+    ]
+    max_num_devices: ClassVar[int] = len(_identities)
+
     device_id: int
-    identity: str
-    channel: int
-    tcp_port: int
-    conn: socket.socket = field(init=False)
-    addr: tuple[str, int] = field(init=False)
+    identity: str = field(init=False)
+    channel: int = field(init=False)
+    tcp_port: int = field(init=False)
+    conn: socket.socket = field(init=False, repr=False)
+    addr: tuple[str, int] = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
         """Docstring."""
+
+        self.identity = self._identities[self.device_id - 1]
+        self.channel = ((self.device_id) * 100) + 1  # 101, 201, 301, ...
+        self.tcp_port = 31339 + self.device_id - 1  # 31339, 31340, 31341, ...
 
         self.hello_message = "\n".join(
             [
@@ -45,7 +61,7 @@ class Device:
 class Emulator:
     """Docstring."""
 
-    devices: list[Device] = []
+    # devices: list[Device] = []
 
     def handle_tcp_connection(self, device: Device) -> None:
         """Docstring."""
@@ -99,7 +115,7 @@ class Emulator:
                 device.conn, device.addr = s.accept()
                 Thread(target=self.handle_tcp_connection, args=(device,)).start()
 
-    def send_broadcast(
+    def broadcast_hello(
         self,
         device: Device,
         interval: float,
@@ -118,8 +134,7 @@ class Emulator:
             if randomize:
                 sleep_time = random.uniform(interval * 0.5, interval * 1.5)
             elif interval == 0:
-                sleep_times = [1, 2, 3]
-                sleep_time = sleep_times[device.device_id - 1]
+                sleep_time = device.device_id
             else:
                 sleep_time = interval
 
@@ -137,7 +152,7 @@ class Emulator:
         tcp_thread.daemon = True
         tcp_thread.start()
 
-        self.send_broadcast(device, interval, randomize)
+        self.broadcast_hello(device, interval, randomize)
 
     def main(self) -> None:
         """Docstring."""
@@ -161,24 +176,14 @@ class Emulator:
         )
 
         args = parser.parse_args()
-        if args.num_devices < 1 or args.num_devices > 3:
-            parser.error("num_devices must from 1 to 3.")
-
-        identities = [
-            "7460001902767F2",
-            "A9000019022E28B",
-            "75000019042F2CD",
-        ]
+        if args.num_devices < 1 or args.num_devices > Device.max_num_devices:
+            parser.error(f"num_devices must from 1 to {Device.max_num_devices}.")
 
         threads = []
-        for i in range(args.num_devices):
-            device = Device(
-                device_id=i + 1,
-                identity=identities[i],
-                channel=((i + 1) * 100) + 1,  # 101, 201, 301, ...
-                tcp_port=31339 + i,
-            )
-            self.__class__.devices.append(device)
+        for device_id in range(1, args.num_devices + 1):
+            device = Device(device_id)
+            print(repr(device))
+            # self.__class__.devices.append(device)
 
             thread = Thread(
                 target=self.emulate_device,
