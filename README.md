@@ -15,6 +15,7 @@ Channels may also be changed from the command line.
 Specify one of:
   COMMAND
     downch              Tune to previous channel on `HOST`.
+    emulator            Run a TiVo set-top device emulator.
     getch               Get and print channel from `HOST`.
     list                List `HOST`s.
     setch               Tune `HOST` to `CHANNEL`.
@@ -48,6 +49,34 @@ positional arguments:
 
 options:
   -h, --help  Show this help message and exit.
+```
+
+## tivo emulator
+```
+usage: tivo emulator [-h] [-n NUM_DEVICES] [-s STAGGER] [-i INTERVAL] [-r]
+
+Tivo Device Emulator.
+
+This program emulates a TiVo set-top device, which:
+    1. Sends a UDP broadcast message every minute or so,
+    2. Listens for TCP connections, and responds to requests.
+
+This is for testing basic features of the client application
+without an actual device.
+
+options:
+  -h, --help            Show this help message and exit.
+  -n NUM_DEVICES, --num_devices NUM_DEVICES
+                        Number of TiVo devices to emulate (default: `1`).
+  -s STAGGER, --stagger STAGGER
+                        Delay the start of each device's TCP-listener in
+                        seconds. Meaningful when NUM_DEVICES is greater than 1
+                        (default: `0`).
+  -i INTERVAL, --interval INTERVAL
+                        Interval between broadcasts in seconds (default:
+                        `60`).
+  -r, --randomize       Randomize the interval, by 50-150%, between each
+                        device's broadcast (default: `False`).
 ```
 
 ## tivo getch
