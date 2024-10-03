@@ -115,5 +115,5 @@ class TivoRemote:
                 address=address,
                 port=port,
             )
-            if self.core.ui_update_device_status_callback:
-                self.core.ui_update_device_status_callback(device)
+            if self.core.ui_update_status_callback:
+                self.core.ui_update_status_callback()

@@ -28,7 +28,7 @@ class TivoUI:
 
         self.core = core
         self.core.set_ui_add_device_callback(self.add_device)
-        self.core.set_ui_update_device_status_callback(self.update_device_status)
+        self.core.set_ui_update_status_callback(self.update_status)
 
         # index of the device that has the focus
         self._ifocus: int | None = None

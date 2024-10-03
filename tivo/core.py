@@ -16,19 +16,17 @@ class TivoCore:
         self.config = config
         self.devices: dict[str, TivoDevice] = {}
         self.ui_add_device_callback: Callable[[TivoDevice], None] | None = None
-        self.ui_update_device_status_callback: Callable[[TivoDevice], None] | None = None
+        self.ui_update_status_callback: Callable[[], None] | None = None
 
     def set_ui_add_device_callback(self, callback: Callable[[TivoDevice], None]) -> None:
         """Docstring."""
 
         self.ui_add_device_callback = callback
 
-    def set_ui_update_device_status_callback(
-        self, callback: Callable[[TivoDevice], None]
-    ) -> None:
+    def set_ui_update_status_callback(self, callback: Callable[[], None]) -> None:
         """Docstring."""
 
-        self.ui_update_device_status_callback = callback
+        self.ui_update_status_callback = callback
 
     def add_device(self, device: TivoDevice) -> None:
         """Docstring."""
