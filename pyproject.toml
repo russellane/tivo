@@ -19,7 +19,7 @@ requires-python = ">=3.10"
 dependencies = [
     "loguru>=0.7.2",
     "rlane-libcli>=1.0.4",
-    "rlane-libcurses>=1.0.6",
+    "rlane-libcurses>=1.0.7",
 ]
 
 [project.urls]

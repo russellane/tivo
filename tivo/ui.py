@@ -7,10 +7,9 @@ import curses
 import curses.ascii
 from typing import Any
 
-from libcurses import getkey, getline, preserve_cursor
+from libcurses import LogSink, getkey, getline, preserve_cursor
 from libcurses.bw import BorderedWindow
 from libcurses.menu import Menu, MenuItem
-from libcurses.sink import Sink
 from libcurses.stack import WindowStack
 from loguru import logger
 
@@ -59,7 +58,7 @@ class TivoUI:
         self.logger_win = self.wstack.append(0, self.ncols2)
 
         # start logging to the logger window
-        self.logwin = Sink(self.logger_win.w)
+        self.logwin = LogSink(self.logger_win.w)
         self.logwin.set_location("{module}:{function}:{line}")
         self.logwin.set_verbose(self.core.options.verbose)
 
