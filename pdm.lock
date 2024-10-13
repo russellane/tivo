@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:9e4fcbf15f95e120f6aaca73cc6b468d8163b9e942b63e56535425bea27206e3"
+content_hash = "sha256:4213548b4604c358a897c8e8672a5902e1ab73c1525d8eff06ac5beee526a2fd"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -616,7 +616,7 @@ files = [
 
 [[package]]
 name = "rlane-libcli"
-version = "1.0.4"
+version = "1.0.5"
 requires_python = ">=3.10"
 summary = "Command line interface framework"
 groups = ["default"]
@@ -626,7 +626,7 @@ dependencies = [
     "tomli>=2.0.2",
 ]
 files = [
-    {file = "rlane_libcli-1.0.4-py3-none-any.whl", hash = "sha256:667929c57b5fc84eb3ee797ab576ca4208db5052a630de3dcb8f2555e0200d54"},
+    {file = "rlane_libcli-1.0.5-py3-none-any.whl", hash = "sha256:1ea69020a9624fc196cc62e89a083836a0438ee18592fe0b40c5db03db62920b"},
 ]
 
 [[package]]
