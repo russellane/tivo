@@ -14,7 +14,7 @@ class TivoCLI(BaseCLI):
 
     config = {
         # name of config file.
-        "config-file": Path.home().joinpath(".tivo.toml"),
+        "config-file": Path("~/.tivo.toml"),
         # toml [section-name].
         "config-name": "tivo",
         # distribution name, not importable package name
