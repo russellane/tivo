@@ -95,7 +95,7 @@ class TivoEmulatorCmd(TivoCmd):
         )
 
         if self.options.num_devices < 1 or self.options.num_devices > Device.max_num_devices:
-            self.cli.parser.error(f"num_devices must from 1 to {Device.max_num_devices}.")
+            self.cli.parser.error(f"num_devices must be from 1 to {Device.max_num_devices}.")
 
         current_thread().name = "main"
 

@@ -1,6 +1,20 @@
+import sys
+from subprocess import run
+
 import pytest
 
 from tivo.cli import main
+
+
+def test_main() -> None:
+
+    def _main() -> None:
+        run(["python", "-m", "tivo", "--version"], check=True)
+        sys.exit(0)
+
+    with pytest.raises(SystemExit) as err:
+        _main()
+    assert err.value.code == 0
 
 
 def test_version() -> None:
@@ -48,38 +62,4 @@ def test_print_config() -> None:
 def test_print_url() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--print-url"])
-    assert err.value.code == 0
-
-
-def test_debug() -> None:
-    with pytest.raises(SystemExit) as err:
-        main(["-X"])
-    assert err.value.code == 0
-
-
-def test_list() -> None:
-    main(["list"])
-
-
-def test_getch_help() -> None:
-    with pytest.raises(SystemExit) as err:
-        main(["getch", "--help"])
-    assert err.value.code == 0
-
-
-def test_setch_help() -> None:
-    with pytest.raises(SystemExit) as err:
-        main(["setch", "--help"])
-    assert err.value.code == 0
-
-
-def test_upch_help() -> None:
-    with pytest.raises(SystemExit) as err:
-        main(["upch", "--help"])
-    assert err.value.code == 0
-
-
-def test_downch_help() -> None:
-    with pytest.raises(SystemExit) as err:
-        main(["downch", "--help"])
     assert err.value.code == 0

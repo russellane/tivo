@@ -7,7 +7,7 @@ class TivoListCmd(TivoCmd):
     """Tivo `list` command class."""
 
     def init_command(self) -> None:
-        """Initialize Tivo `listch` command instance."""
+        """Initialize Tivo `list` command instance."""
 
         self.add_subcommand_parser(
             "list",
