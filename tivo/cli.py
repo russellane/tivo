@@ -8,6 +8,8 @@ from tivo.cmd import TivoCmd
 from tivo.core import TivoCore
 from tivo.remote import TivoRemote
 
+__all__ = ["TivoCLI"]
+
 
 class TivoCLI(BaseCLI):
     """Command line interface."""
@@ -73,4 +75,4 @@ class TivoCLI(BaseCLI):
 
 def main(args: list[str] | None = None) -> None:
     """Command line interface entry point (function)."""
-    return TivoCLI(args).main()
+    TivoCLI(args).main()
