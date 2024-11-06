@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:681a5d03a445b249c3dbdbdca6ec13eca372cb77542d28dfacc8e55618f60993"
+content_hash = "sha256:836108f697a9d133d143b9e5c80735e75f8e0a0d5bc7e0dacef4e55d2ab32896"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -632,11 +632,12 @@ dependencies = [
 ]
 files = [
     {file = "rlane_libcli-1.0.7-py3-none-any.whl", hash = "sha256:164eec823525a99b52bb68ceebe8412ff8cf127cbd8c200a45f8dedea196ed5e"},
+    {file = "rlane_libcli-1.0.7.tar.gz", hash = "sha256:5adb02b2cd404fa6bd2b7277d4e9fccde4fe235103a279acc41fe747843981c3"},
 ]
 
 [[package]]
 name = "rlane-libcurses"
-version = "1.0.7"
+version = "1.0.8"
 requires_python = ">=3.10"
 summary = "Curses based boxes, menus, loggers"
 groups = ["default"]
@@ -644,9 +645,8 @@ dependencies = [
     "loguru>=0.7.2",
 ]
 files = [
-    {file = "rlane_libcurses-1.0.7-py3-none-any.whl", hash = "sha256:9c29f3113707c215e970e93152ff643c49b720c9c1464d363070d8599b1deffc"},
-    {file = "rlane_libcurses-1.0.7-py3-none-any.whl", hash = "sha256:e982a6170f1b0200334d4fee4dc1b0c7d3ce2c64ff4a9d2356d4f672baa69189"},
-    {file = "rlane_libcurses-1.0.7.tar.gz", hash = "sha256:9f50c98d53028410ac7353672e705e48c7f62833cedb2a23fd3610f29bbdf229"},
+    {file = "rlane_libcurses-1.0.8-py3-none-any.whl", hash = "sha256:f53923837c10a5d7d1671d097d61979914c533869b05caf5433c67a8992de02e"},
+    {file = "rlane_libcurses-1.0.8.tar.gz", hash = "sha256:e448c0b0535fc0ab243adbe42b3263b9f5077e71dfd0eb3b5ce966d484a5c6d2"},
 ]
 
 [[package]]
