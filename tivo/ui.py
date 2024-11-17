@@ -44,7 +44,7 @@ class TivoUI:
         ncols1 = 37
         self.ncols2 = maxx - ncols1
         if self.ncols2 < 3:
-            raise RuntimeError(f"Screen is {abs(self.ncols2-3)} columns too narrow")
+            raise RuntimeError(f"Screen is {abs(self.ncols2 - 3)} columns too narrow")
 
         # column 1: menu window
         self.menu_win = BorderedWindow(maxy, ncols1, begin_y, begin_x)

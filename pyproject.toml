@@ -1,6 +1,6 @@
 [project]
 name = "rlane-tivo"
-version = "1.0.4"
+version = "1.0.5"
 description = "A curses-based TiVo remote control"
 authors = [
     {name = "Russel Lane", email = "russel@rlane.com"},
@@ -9,7 +9,7 @@ license = {text = "MIT"}
 readme = "README.md"
 keywords = ["curses", "home-automation", "python", "tivo"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -18,8 +18,8 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "loguru>=0.7.2",
-    "rlane-libcli>=1.0.7",
-    "rlane-libcurses>=1.0.8",
+    "rlane-libcli>=1.0.8",
+    "rlane-libcurses>=1.0.9",
 ]
 
 [project.urls]

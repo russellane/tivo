@@ -66,13 +66,13 @@ without an actual device.
 
 options:
   -h, --help            Show this help message and exit.
-  -n NUM_DEVICES, --num_devices NUM_DEVICES
+  -n, --num_devices NUM_DEVICES
                         Number of TiVo devices to emulate (default: `1`).
-  -s STAGGER, --stagger STAGGER
+  -s, --stagger STAGGER
                         Delay the start of each device's TCP-listener in
                         seconds. Meaningful when NUM_DEVICES is greater than 1
                         (default: `0`).
-  -i INTERVAL, --interval INTERVAL
+  -i, --interval INTERVAL
                         Interval between broadcasts in seconds (default:
                         `60`).
   -r, --randomize       Randomize the interval, by 50-150%, between each
