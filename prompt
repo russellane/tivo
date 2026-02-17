@@ -1,0 +1,1 @@
+Write a python program that emulates a TiVo set-top device, which sends a UDP broadcast message every minute or so. It should accept a command line option to specify the number of tivo devices to emulate, and another option specifying if the wait time interval between broadcasts is fixed or randomized.

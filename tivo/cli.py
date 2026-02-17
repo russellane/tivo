@@ -30,8 +30,7 @@ class TivoCLI(BaseCLI):
 
         self.parser = self.ArgumentParser(
             prog=__package__,
-            description=self.dedent(
-                """
+            description=self.dedent("""
     `%(prog)s` controls remote TiVo™ devices. When no `COMMAND` is given,
     %(prog)s listens for broadcasts from remote devices, and presents an
     interactive terminal application to display their status, change
@@ -39,8 +38,7 @@ class TivoCLI(BaseCLI):
     full computer keyboard.
 
     Channels may also be changed from the command line.
-                """
-            ),
+                """),
         )
 
     def add_arguments(self) -> None:
@@ -49,13 +47,11 @@ class TivoCLI(BaseCLI):
 
         self.parser.add_argument_group(
             title="Configuration file",
-            description=self.dedent(
-                """
+            description=self.dedent("""
         TiVo devices broadcast a unique, non-readable `identity` string
         every few minutes. The `--config FILE` maps `identity` to `host`
         names, like `/etc/hosts`.
-                """
-            ),
+                """),
         )
 
     def main(self) -> None:
