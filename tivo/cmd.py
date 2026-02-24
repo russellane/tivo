@@ -26,7 +26,8 @@ class TivoCmd(BaseCmd):
         hosts = []
         with open("/etc/hosts", encoding="utf-8") as file:
             for line in file:
-                line = line.strip()
+                # PLW2901: line is stripped in-place before parsing.
+                line = line.strip()  # noqa: PLW2901
                 if len(line) < 1 or line[0] == "#":
                     continue
                 value = line.split()

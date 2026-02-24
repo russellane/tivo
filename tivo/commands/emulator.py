@@ -76,7 +76,8 @@ class TivoEmulatorCmd(TivoCmd):
     def run(self) -> None:
         """Perform the command."""
 
-        try:
+        # SIM105: ValueError is raised when no handler is registered; expected on first run.
+        try:  # noqa: SIM105
             logger.remove()
         except ValueError:
             ...
@@ -101,7 +102,6 @@ class TivoEmulatorCmd(TivoCmd):
 
         threads = []
         for device_id in range(1, self.options.num_devices + 1):
-
             # Each call to the constructor creates a unique device.
             device = Device(device_id)
             logger.info(f"Starting {device}")

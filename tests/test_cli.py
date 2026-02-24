@@ -7,7 +7,6 @@ from tivo.cli import main
 
 
 def test_main() -> None:
-
     def _main() -> None:
         run(["python", "-m", "tivo", "--version"], check=True)
         sys.exit(0)

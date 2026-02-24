@@ -2,7 +2,7 @@
 
 Hand-held device that controls Tivo set-top devices remotely.
 
-See https://github.com/RogueProeliator/IndigoPlugin-TiVo-Network-Remote/blob/master/Documentation/TiVo_TCP_Network_Remote_Control_Protocol.pdf  # noqa
+See https://github.com/RogueProeliator/IndigoPlugin-TiVo-Network-Remote/blob/master/Documentation/TiVo_TCP_Network_Remote_Control_Protocol.pdf  # noqa: E501
 """
 
 import curses
@@ -20,8 +20,6 @@ from tivo.ui import TivoUI
 
 class TivoRemote:
     """Hand-held device that controls Tivo set-top devices remotely."""
-
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, core: TivoCore) -> None:
         """Initialize."""
@@ -91,7 +89,8 @@ class TivoRemote:
             machine = match.group("machine")
             address = address[0]
 
-            if match := regex2.search(msg):
+            # SIM108: comments in each branch identify source; ternary would lose that context.
+            if match := regex2.search(msg):  # noqa: SIM108
                 # sent from our emulator.
                 port = int(match.group("port"))
             else:

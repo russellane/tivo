@@ -12,7 +12,6 @@ from loguru import logger
 # https://github.com/RogueProeliator/IndigoPlugin-TiVo-Network-Remote/blob/master/Documentation/TiVo_TCP_Network_Remote_Control_Protocol.pdf
 
 
-# pylint: disable=too-many-instance-attributes
 class TivoDevice:
     """Tivo Device."""
 
@@ -27,8 +26,6 @@ class TivoDevice:
         host: str | None = None,
         port: int | None = None,
     ) -> None:
-        # pylint: disable=too-many-arguments
-        # pylint: disable=too-many-positional-arguments
         """Init."""
 
         self.identity = identity
@@ -52,7 +49,6 @@ class TivoDevice:
         self.npings = 0  # number of broadcasts heard from device
 
     def _map_host(self) -> None:
-
         if not self.host and self.address:
             # use case: heartbeat from new device.
             #   TivoDevice(identity=identity, machine=machine, address=address)
@@ -128,7 +124,6 @@ class TivoDevice:
         self.send_ircode("CHANNELDOWN")
 
     def _connect(self) -> None:
-
         if not self.address:
             logger.warning("{!r} No address yet", self.host)
             return
@@ -188,7 +183,6 @@ class TivoDevice:
         self._recv()
 
     def _send(self, msg: str) -> None:
-
         if not self.sock:
             self._connect()
 
@@ -197,13 +191,13 @@ class TivoDevice:
             try:
                 self.sock.send((msg + "\r").encode("ASCII"))
                 self.last_msg_sent = msg
-            except Exception as err:  # noqa
+            # Catch broad exceptions; socket errors during send are logged and connection closed.
+            except Exception as err:  # noqa: PLW0703
                 logger.error("{!r} Can't send; {}", self.host, err)
                 self.sock.close()
                 self.sock = None
 
     def _recv(self) -> None:
-
         if not self.sock:
             return
 
@@ -221,7 +215,6 @@ class TivoDevice:
             self.reason = "timeout"
 
     def _parse(self) -> None:
-
         # Expecting one of:
         #   CH_STATUS channel reason
         #   CH_STATUS channel sub-channel reason
@@ -233,10 +226,11 @@ class TivoDevice:
             if words[0] == "CH_STATUS":
                 self.status = words[0]
 
-                if nwords == 3:
+                # PLR2004: 3/4 are the documented CH_STATUS word counts in the TiVo protocol.
+                if nwords == 3:  # noqa: PLR2004
                     self.channel = words[1]
                     self.reason = words[2]
-                elif nwords == 4:
+                elif nwords == 4:  # noqa: PLR2004
                     self.channel = words[1]
                     self.subchannel = words[2]
                     self.reason = words[3]

@@ -20,8 +20,6 @@ from tivo.device import TivoDevice
 class TivoUI:
     """User Interface."""
 
-    # pylint: disable=too-many-instance-attributes
-
     def __init__(self, core: TivoCore, stdscr: curses.window) -> None:
         """Create user interface on `stdscr`."""
 
@@ -43,7 +41,8 @@ class TivoUI:
 
         ncols1 = 37
         self.ncols2 = maxx - ncols1
-        if self.ncols2 < 3:
+        # PLR2004: 3 is the minimum usable column width (border + at least 1 content column).
+        if self.ncols2 < 3:  # noqa: PLR2004
             raise RuntimeError(f"Screen is {abs(self.ncols2 - 3)} columns too narrow")
 
         # column 1: menu window
@@ -91,7 +90,7 @@ class TivoUI:
             ["last_msg_sent", "last_msg_rcvd", "status", "reason", "last_msg_rcvd_time"],
         ]
 
-        self._rows = list(map(list, zip(*self._cols)))  # transpose 2d array
+        self._rows = list(map(list, zip(*self._cols, strict=False)))  # transpose 2d array
         assert len(self._rows) == self.status_window_nlines - 2  # 2 for borders
 
         # Each column has 2 subcolumns: a key/value pair.
@@ -188,20 +187,17 @@ class TivoUI:
         for row, _ in enumerate(self._rows):
             bwin.w.move(row, 0)
             for col in range(len(self._cols)):
-                #
                 attrname = self._rows[row][col]
                 if attr := self._attrs.get(attrname):
                     key = str(attr["key"])
                     value = str(getattr(device, attrname))
                 else:
                     key = value = ""
-                #
                 if col > 0:
                     bwin.w.addstr(self._col_gutter, color_values)
                 bwin.w.addstr(key.rjust(self._key_widths[col]), color_names)
                 bwin.w.addstr(self._attr_gutter, color_names)
                 bwin.w.addstr(value.ljust(self._val_widths[col]), color_values)
-            #
         #
         # bwin.w.scroll(-1)
         bwin.w.refresh()
@@ -261,10 +257,8 @@ class TivoUI:
                 break
 
     def _run(self, item: MenuItem) -> bool:
-
         if isinstance(item.payload, str):
             # invoke the named method on the device in focus
-            # pylint: disable=no-else-return
             if not self._focus:
                 logger.error("No device in focus")
                 return False  # continue looping
@@ -338,7 +332,6 @@ class TivoUI:
         return False
 
     def _keyboard_shell(self) -> None:
-
         if not self._focus:
             logger.error("No device in focus")
             return
@@ -401,7 +394,6 @@ class TivoUI:
     }
 
     def _prev_device(self) -> None:
-
         if not (ndevices := len(self.core.devices)):
             logger.error("There are no devices")
             return
@@ -411,7 +403,6 @@ class TivoUI:
         logger.info(f"Current device: {self._focus.host!r}")
 
     def _next_device(self) -> None:
-
         if not (ndevices := len(self.core.devices)):
             logger.error("There are no devices")
             return
@@ -423,7 +414,6 @@ class TivoUI:
         logger.info(f"Current device: {self._focus.host!r}")
 
     def _test_menu(self) -> Any:
-
         menu = Menu(title="Test menu", instructions="Choose test")
 
         for loc in "0123456":
